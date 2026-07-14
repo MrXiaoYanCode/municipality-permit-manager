@@ -3,11 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { AuthLayout } from "@/components/auth/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { FileCheck } from "lucide-react";
+import { InteractiveHoverButton } from "@/components/blocks/interactive-hover-button";
+import { Mail, Lock, User, Sparkles, CheckCircle2 } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -41,81 +43,116 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="flex min-h-screen items-center justify-center px-4">
-        <Card className="w-full max-w-md text-center">
-          <CardHeader>
-            <CardTitle>Check your email</CardTitle>
-            <CardDescription>
-              We sent a confirmation link to {email}. Click it to activate your account.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Button asChild>
-              <Link href="/auth/login">Back to Sign In</Link>
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+      <AuthLayout title="Check your inbox" subtitle="One more step to activate your account.">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="rounded-2xl border border-border/60 bg-card/50 p-8 text-center backdrop-blur-sm"
+        >
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-500/10">
+            <CheckCircle2 className="h-8 w-8 text-green-500" />
+          </div>
+          <p className="mb-2 font-medium">Confirmation email sent</p>
+          <p className="mb-6 text-sm text-muted-foreground">
+            We sent a link to <span className="font-medium text-foreground">{email}</span>.
+            Click it to activate your account.
+          </p>
+          <Button className="rounded-xl" asChild>
+            <Link href="/auth/login">Back to Sign In</Link>
+          </Button>
+        </motion.div>
+      </AuthLayout>
     );
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-primary/10">
-            <FileCheck className="h-6 w-6 text-primary" />
+    <AuthLayout
+      title="Create your account"
+      subtitle="Start tracking permits for free — no credit card required."
+    >
+      <form onSubmit={handleSignup} className="space-y-5">
+        <div className="space-y-2">
+          <Label htmlFor="name" className="flex items-center gap-2">
+            <User className="h-3.5 w-3.5 text-muted-foreground" />
+            Full Name
+          </Label>
+          <Input
+            id="name"
+            placeholder="Jane Smith"
+            value={fullName}
+            onChange={(e) => setFullName(e.target.value)}
+            className="h-11 rounded-xl border-border/60 bg-card/50 backdrop-blur-sm focus-visible:ring-primary"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="email" className="flex items-center gap-2">
+            <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+            Email
+          </Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="you@business.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="h-11 rounded-xl border-border/60 bg-card/50 backdrop-blur-sm focus-visible:ring-primary"
+            required
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="password" className="flex items-center gap-2">
+            <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+            Password
+          </Label>
+          <Input
+            id="password"
+            type="password"
+            placeholder="Min. 8 characters"
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="h-11 rounded-xl border-border/60 bg-card/50 backdrop-blur-sm focus-visible:ring-primary"
+            required
+          />
+        </div>
+
+        {error && (
+          <div className="rounded-xl border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            {error}
           </div>
-          <CardTitle className="text-2xl">Create your account</CardTitle>
-          <CardDescription>Start tracking permits for free</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSignup} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Full Name</Label>
-              <Input
-                id="name"
-                placeholder="Jane Smith"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="you@business.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                minLength={8}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
-            {error && <p className="text-sm text-destructive">{error}</p>}
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? "Creating account..." : "Create Account"}
-            </Button>
-          </form>
-          <p className="mt-4 text-center text-sm text-muted-foreground">
-            Already have an account?{" "}
-            <Link href="/auth/login" className="text-primary hover:underline">
-              Sign in
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+        )}
+
+        <InteractiveHoverButton
+          type="submit"
+          disabled={loading}
+          className="h-12 w-full rounded-xl text-base"
+        >
+          {loading ? "Creating account..." : "Create Account — Free"}
+        </InteractiveHoverButton>
+
+        <p className="text-center text-xs text-muted-foreground">
+          By signing up you agree to our terms. Free plan includes 5 AI documents/month.
+        </p>
+      </form>
+
+      <div className="relative my-8">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full border-t border-border/60" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-3 text-muted-foreground">Already have an account?</span>
+        </div>
+      </div>
+
+      <Button variant="outline" className="h-11 w-full rounded-xl" asChild>
+        <Link href="/auth/login" className="flex items-center gap-2">
+          <Sparkles className="h-4 w-4 text-primary" />
+          Sign in instead
+        </Link>
+      </Button>
+    </AuthLayout>
   );
 }
