@@ -1,0 +1,86 @@
+Act as a Principal Full-Stack & Lead AI/ML Platform Architect. I want you to build, architect, connect, and completely automate the deployment for an enterprise-ready system based on the description at the bottom of this message in a single execution loop.
+
+Please strictly execute the following sequence:
+
+1. WORKSPACE ANALYSIS & DOCUMENTATION ENGINEERING (PRD, TRD, ARCHITECTURE):
+   - Thoroughly inspect this workspace folder.
+   - FALLBACK INFRASTRUCTURE GENERATION: If the workspace is empty or lacks comprehensive specs, you must stop immediately and autonomously create an enterprise-grade documentation suite in a folder named /docs before writing any app code:
+     A) docs/PRD.md: Full Product Requirements Document detailing user personas, functional specs, user stories, and feature prioritization scope.
+     B) docs/TRD.md: Technical Requirements Document specifying data models, non-functional specs, scaling infrastructure, API specs, and AI/ML model deployment parameters.
+     C) docs/AI_PIPELINE.md: A deep technical blueprint mapping out the AI/ML workflows (e.g., retrieval logic, vector embeddings schemas, prompt orchestration caching, or inference pipelines).
+   - Prioritize a 100% Serverless/Edge framework (like Next.js on Vercel or Supabase Edge Functions) for instant scaling and absolute cost optimization on free/low tiers.
+
+2. AUTHENTICATION & SYSTEM LOGIN CHECKS:
+   - Run gh auth status in the terminal to verify GitHub CLI status. If not authenticated, pause and instruct me to run gh auth login.
+   - Run stripe status to verify Stripe CLI access. If required, pause and instruct me to run stripe login.
+
+3. ADVANCED CODE GENERATION & AI/ML ENGINE INTEGRATION:
+   - Build a beautiful, high-performance UI layout (Next.js with Tailwind CSS) mapped cleanly to the PRD workflows.
+   - Configure advanced database utility files to connect securely to Supabase.
+   - Build the core AI/ML orchestration module (e.g., endpoints utilizing OpenAI/Anthropic/DeepSeek wrappers or Supabase pgvector embedding utilities as defined in the AI Pipeline doc).
+   - Construct a secure, signature-validated Stripe Webhook endpoint (/api/webhooks/stripe) handling usage-based or subscription events (checkout.session.completed, invoice.payment_succeeded) that instantly updates user quotas and access tiers in the Supabase DB.
+
+4. "FOREVER-FREE" IMMORTAL CRON JOB AUTOMATION:
+   - Create the directory structure .github/workflows/ and write a keep_alive.yml file scheduled to fire every 3 days ('0 0 */3 * *') to keep the Supabase database instance active forever.
+   - Add a repository self-updating mechanism: configure the workflow to run a lightweight curl ping to your database and automatically write/append a timestamp inside a 'heartbeat.txt' file, commit it, and push it back to the repository using permissions: contents: write. This removes GitHub's 60-day inactivity freeze entirely.
+
+5. AUTOMATED INFRASTRUCTURE-AS-CODE & GIT REPOSITORY:
+   - Run git init in the root workspace, track all generated documentation folders (/docs), applications, and YAML pipelines, and execute an initial master commit.
+   - Use the GitHub CLI to automatically spin up a private remote repository online and push the initial branch:
+     gh repo create --private --source=. --remote=origin --push
+
+6. SECURE SYSTEM ENV & REPOSITORY SECRETS INJECTION:
+   - Do not request browser interaction or manual input for repository values.
+   - Read the active keys (SUPABASE_URL, SUPABASE_ANON_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, and AI_PROVIDER_API_KEY) from local configs.
+   - Run automated terminal commands using the GitHub CLI to inject them directly into your GitHub Actions secrets pool:
+     gh secret set SUPABASE_URL --body "[Value]"
+     gh secret set SUPABASE_ANON_KEY --body "[Value]"
+     gh secret set STRIPE_SECRET_KEY --body "[Value]"
+     gh secret set STRIPE_WEBHOOK_SECRET --body "[Value]"
+     gh secret set AI_PROVIDER_API_KEY --body "[Value]"
+
+
+7. AUTOMATED PRODUCTION LIVE DEPLOYMENT PREPARATION:
+   - Check for local instances of Vercel or Supabase CLIs. Write production configuration profiles (vercel.json or supabase/config.toml) and spit out the exact terminal trigger commands needed to launch the entire stack live.
+
+E.g., "I want to build an AI-powered B2B platform that reads uploaded PDFs, generates vector embeddings into Supabase pgvector, lets users query their data via a chat dashboard, and charges them $0.01 per document processed using Stripe usage-based billing." like this if need for this
+
+Municipality Permit Manager
+
+Many businesses deal with approvals from municipalities.
+
+Examples:
+
+Restaurants
+Beauty salons
+Cafes
+Events
+Advertising signage
+Food trucks
+
+A SaaS that tracks:
+
+Permit deadlines
+Renewal documents
+Inspection schedules
+Compliance checklist
+
+mainly building Municipality Permit Manager
+
+fully free forever frameworks use and it should not pause or go downtime and if need keep cron job using cron org
+
+
+search mcp servers and complete the app using that you iteself build everything and review and search
+
+https://21st.dev/@Codehagen/components/pricing
+https://21st.dev/community/templates 
+https://21st.dev/@danielpetho/components/typewriter
+https://21st.dev/@victorwelander/components/gooey-text-morphing
+https://21st.dev/@dillionverma/components/interactive-hover-button
+https://21st.dev/@Codehagen/components/display-cards
+https://21st.dev/@sshahaider/components/zoom-parallax
+
+https://21st.dev/  use all referece create best looking
+responsive very good
+
+and also keep like light and dark mode

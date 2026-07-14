@@ -1,0 +1,48 @@
+name: Keep Alive — Supabase & Repo Heartbeat
+
+on:
+  schedule:
+    - cron: "0 0 */3 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Ping Supabase health endpoint
+        run: |
+          if [ -n "${{ secrets.SUPABASE_URL }}" ]; then
+            curl -sf "${{ secrets.SUPABASE_URL }}/rest/v1/" \
+              -H "apikey: ${{ secrets.SUPABASE_ANON_KEY }}" \
+              -H "Authorization: Bearer ${{ secrets.SUPABASE_ANON_KEY }}" \
+              || echo "Supabase ping failed (non-critical)"
+          else
+            echo "SUPABASE_URL secret not set, skipping ping"
+          fi
+
+      - name: Ping app health endpoint
+        run: |
+          APP_URL="${{ secrets.NEXT_PUBLIC_APP_URL }}"
+          if [ -n "$APP_URL" ]; then
+            curl -sf "$APP_URL/api/health" || echo "App health ping failed (non-critical)"
+          fi
+
+      - name: Update heartbeat timestamp
+        run: |
+          echo "Last heartbeat: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" >> heartbeat.txt
+          echo "Workflow run: ${{ github.run_id }}" >> heartbeat.txt
+          echo "---" >> heartbeat.txt
+
+      - name: Commit and push heartbeat
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add heartbeat.txt
+          git diff --staged --quiet || git commit -m "chore: keep-alive heartbeat $(date -u +%Y-%m-%d)"
+          git push
