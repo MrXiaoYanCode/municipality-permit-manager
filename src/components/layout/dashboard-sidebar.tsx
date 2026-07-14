@@ -92,12 +92,12 @@ export function DashboardSidebar() {
         {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
-      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-border lg:bg-card">
+      <aside className="hidden lg:flex lg:w-64 lg:flex-col lg:border-r lg:border-border/60 glass-nav lg:m-3 lg:rounded-2xl lg:min-h-[calc(100vh-1.5rem)]">
         <SidebarContent />
       </aside>
 
       {mobileOpen && (
-        <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-border bg-card lg:hidden">
+        <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col glass-nav lg:hidden m-2 rounded-2xl">
           <SidebarContent />
         </aside>
       )}

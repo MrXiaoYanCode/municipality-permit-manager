@@ -22,6 +22,8 @@ export function Typewriter({
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), "");
+
   useEffect(() => {
     const currentWord = words[wordIndex % words.length];
 
@@ -49,8 +51,12 @@ export function Typewriter({
   }, [displayText, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pauseDuration]);
 
   return (
-    <span className={cn("typewriter-cursor", className)}>
-      {displayText}
+    <span className={cn("relative inline-block text-left", className)}>
+      {/* Invisible sizer prevents layout shift */}
+      <span className="invisible" aria-hidden="true">{longestWord}|</span>
+      <span className="typewriter-cursor absolute left-0 top-0 whitespace-nowrap">
+        {displayText}
+      </span>
     </span>
   );
 }

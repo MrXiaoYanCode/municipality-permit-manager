@@ -15,7 +15,7 @@ import {
   Truck,
 } from "lucide-react";
 import { Typewriter } from "@/components/blocks/typewriter";
-import { GooeyTextMorphing } from "@/components/blocks/gooey-text-morphing";
+import { IndustryCarousel } from "@/components/blocks/industry-carousel";
 import { InteractiveHoverButton } from "@/components/blocks/interactive-hover-button";
 import { DisplayCards } from "@/components/blocks/display-cards";
 import { Pricing, type PricingPlan } from "@/components/blocks/pricing";
@@ -114,47 +114,50 @@ const pricingPlans: PricingPlan[] = [
 export function LandingContent() {
   return (
     <>
-      <section className="relative overflow-hidden py-20 sm:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/10" />
+      <section className="relative overflow-hidden py-16 sm:py-28">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/8 via-transparent to-transparent dark:from-primary/12" />
         <div className="container relative mx-auto px-4 text-center">
-          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-1.5 text-sm">
+          <div className="glass-card mb-6 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-sm">
             <Sparkles className="h-4 w-4 text-primary" />
             AI-Powered Municipal Compliance
           </div>
+
           <h1 className="mx-auto mb-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-            Never Miss a{" "}
-            <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <span className="block sm:inline">Never Miss a</span>{" "}
+            <span className="mt-2 block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent sm:mt-0 sm:inline">
               <Typewriter
                 words={["Permit Deadline", "Renewal Date", "Inspection", "Compliance Check"]}
-                className="inline"
               />
             </span>
           </h1>
+
           <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground">
             Track municipal permits, renewal documents, inspection schedules, and compliance
             checklists — all in one beautiful dashboard.
           </p>
+
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link href="/auth/signup">
               <InteractiveHoverButton>Start Free — No Credit Card</InteractiveHoverButton>
             </Link>
             <Link
               href="#features"
-              className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               See how it works →
             </Link>
           </div>
-          <div className="mt-16">
-            <GooeyTextMorphing
-              texts={["Restaurants", "Salons", "Cafes", "Events", "Signage", "Food Trucks"]}
-              className="mx-auto h-12 text-2xl text-primary sm:text-3xl"
+
+          <div className="mt-14">
+            <p className="mb-3 text-sm text-muted-foreground">Built for</p>
+            <IndustryCarousel
+              items={["Restaurants", "Salons", "Cafes", "Events", "Signage", "Food Trucks"]}
             />
           </div>
         </div>
       </section>
 
-      <section id="features" className="border-t border-border py-20">
+      <section id="features" className="border-t border-border/60 py-20">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Everything You Need to Stay Compliant</h2>
@@ -167,7 +170,7 @@ export function LandingContent() {
         </div>
       </section>
 
-      <section id="industries" className="border-t border-border bg-muted/30 py-20">
+      <section id="industries" className="border-t border-border/60 py-20">
         <div className="container mx-auto px-4">
           <div className="mb-12 text-center">
             <h2 className="mb-4 text-3xl font-bold sm:text-4xl">Built for Your Industry</h2>
@@ -179,9 +182,9 @@ export function LandingContent() {
             {industries.map((ind) => (
               <div
                 key={ind.name}
-                className={`flex items-center gap-4 rounded-2xl border border-border bg-gradient-to-br ${ind.color} p-6 transition-transform hover:scale-[1.02]`}
+                className={`glass-card flex items-center gap-4 rounded-2xl bg-gradient-to-br p-6 transition-all hover:scale-[1.02] hover:shadow-lg ${ind.color}`}
               >
-                <div className="rounded-xl bg-background/80 p-3">
+                <div className="rounded-xl bg-background/80 p-3 dark:bg-white/10">
                   <ind.icon className="h-6 w-6 text-primary" />
                 </div>
                 <span className="text-lg font-semibold">{ind.name}</span>
@@ -191,7 +194,7 @@ export function LandingContent() {
         </div>
       </section>
 
-      <section id="pricing" className="border-t border-border">
+      <section id="pricing" className="border-t border-border/60">
         <Pricing
           plans={pricingPlans}
           title="Simple, Transparent Pricing"
@@ -199,15 +202,17 @@ export function LandingContent() {
         />
       </section>
 
-      <section className="border-t border-border py-20">
+      <section className="border-t border-border/60 py-20">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="mb-4 text-3xl font-bold">Ready to Simplify Compliance?</h2>
-          <p className="mx-auto mb-8 max-w-xl text-muted-foreground">
-            Join businesses that trust PermitFlow to keep their permits current and their doors open.
-          </p>
-          <Link href="/auth/signup">
-            <InteractiveHoverButton>Get Started Free</InteractiveHoverButton>
-          </Link>
+          <div className="glass-card mx-auto max-w-2xl rounded-3xl p-10">
+            <h2 className="mb-4 text-3xl font-bold">Ready to Simplify Compliance?</h2>
+            <p className="mx-auto mb-8 max-w-xl text-muted-foreground">
+              Join businesses that trust PermitFlow to keep their permits current and their doors open.
+            </p>
+            <Link href="/auth/signup">
+              <InteractiveHoverButton>Get Started Free</InteractiveHoverButton>
+            </Link>
+          </div>
         </div>
       </section>
     </>

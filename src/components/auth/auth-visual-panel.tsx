@@ -30,14 +30,13 @@ function ParallaxLayer({
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const scale = useTransform(scrollYProgress, [0, 1], [1 + index * 0.08, 1.15 + index * 0.1]);
-  const y = useTransform(scrollYProgress, [0, 1], [index * 20, -index * 30]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.4 + index * 0.15, 1, 0.6]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1 + index * 0.05, 1.1 + index * 0.08]);
+  const y = useTransform(scrollYProgress, [0, 1], [index * 15, -index * 20]);
 
   return (
     <div ref={ref} className="absolute inset-0">
-      <motion.div style={{ scale, y, opacity }} className="h-full w-full">
-        <Image src={src} alt={alt} fill className="object-cover" sizes="50vw" priority={index === 0} />
+      <motion.div style={{ scale, y }} className="h-full w-full">
+        <Image src={src} alt={alt} fill className="object-cover opacity-40" sizes="50vw" priority={index === 0} />
       </motion.div>
     </div>
   );
@@ -49,12 +48,19 @@ export function AuthVisualPanel() {
       {AUTH_IMAGES.map((img, i) => (
         <ParallaxLayer key={img.alt} {...img} index={i} />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/80 via-background/90 to-background/95" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-primary/20 via-transparent to-transparent" />
-      <div className="absolute inset-0 opacity-30">
-        <div className="absolute left-1/4 top-1/4 h-64 w-64 rounded-full bg-primary/30 blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 h-48 w-48 rounded-full bg-blue-500/20 blur-3xl" />
-      </div>
+      {/* Dark overlay — ensures white text is always readable */}
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-950/92 via-slate-900/88 to-slate-950/95" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_30%_20%,_oklch(0.55_0.2_260_/_0.25),_transparent_60%)]" />
+      {/* Subtle grid on auth panel */}
+      <div
+        className="absolute inset-0 opacity-[0.07]"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+          backgroundSize: "40px 40px",
+        }}
+      />
+      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-slate-950 to-transparent" />
     </div>
   );
 }

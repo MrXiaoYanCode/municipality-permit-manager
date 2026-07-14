@@ -27,7 +27,7 @@ export function DisplayCards({ cards }: DisplayCardsProps) {
           transition={{ delay: i * 0.1, duration: 0.5 }}
           whileHover={{ y: -8, transition: { duration: 0.2 } }}
           className={cn(
-            "group relative overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-sm transition-shadow hover:shadow-lg",
+            "group relative overflow-hidden rounded-2xl glass-card p-6 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1",
             card.className
           )}
         >

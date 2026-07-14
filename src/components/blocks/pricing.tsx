@@ -80,8 +80,8 @@ export function Pricing({ plans, title, description }: PricingProps) {
               viewport={{ once: true }}
               whileHover={{ y: -4 }}
               className={cn(
-                "relative rounded-2xl border bg-card p-8 shadow-sm transition-shadow hover:shadow-lg",
-                plan.isPopular && "border-primary shadow-md ring-1 ring-primary/20"
+                "relative rounded-2xl glass-card p-8 shadow-sm transition-all hover:shadow-lg hover:-translate-y-1",
+                plan.isPopular && "ring-2 ring-primary/30 shadow-md shadow-primary/10"
               )}
             >
               {plan.isPopular && (
