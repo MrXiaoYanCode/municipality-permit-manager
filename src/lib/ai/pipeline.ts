@@ -1,5 +1,5 @@
-import OpenAI from "openai";
 import type { ExtractedPermitData } from "@/types";
+import { chatWithFallback, generateEmbeddingVector } from "./providers";
 
 const EXTRACTION_PROMPT = `You are a municipal permit document parser.
 Extract the following from this permit document:
@@ -28,53 +28,33 @@ RULES:
 CONTEXT:
 {context}`;
 
-function getAIClient(): OpenAI {
-  return new OpenAI({
-    apiKey: process.env.AI_PROVIDER_API_KEY,
-    baseURL:
-      process.env.AI_PROVIDER === "deepseek"
-        ? "https://api.deepseek.com/v1"
-        : undefined,
-  });
-}
-
 export async function extractPermitData(text: string): Promise<ExtractedPermitData> {
-  const client = getAIClient();
-  const model = process.env.AI_PROVIDER === "deepseek" ? "deepseek-chat" : "gpt-4o-mini";
-
-  const response = await client.chat.completions.create({
-    model,
+  const content = await chatWithFallback({
     messages: [
       { role: "system", content: EXTRACTION_PROMPT },
       { role: "user", content: text.slice(0, 12000) },
     ],
-    response_format: { type: "json_object" },
     temperature: 0.1,
-    max_tokens: 2000,
+    maxTokens: 2000,
+    jsonMode: true,
   });
-
-  const content = response.choices[0]?.message?.content;
-  if (!content) throw new Error("No extraction response");
 
   return JSON.parse(content) as ExtractedPermitData;
 }
 
 export async function generateEmbedding(text: string): Promise<number[]> {
-  const client = getAIClient();
-  const response = await client.embeddings.create({
-    model: "text-embedding-3-small",
-    input: text.slice(0, 8000),
-  });
-  return response.data[0].embedding;
+  const embedding = await generateEmbeddingVector(text);
+  if (embedding) return embedding;
+  throw new Error("Embedding unavailable");
 }
 
 export async function generateEmbeddings(chunks: string[]): Promise<number[][]> {
-  const client = getAIClient();
-  const response = await client.embeddings.create({
-    model: "text-embedding-3-small",
-    input: chunks.map((c) => c.slice(0, 8000)),
-  });
-  return response.data.map((d) => d.embedding);
+  const results: number[][] = [];
+  for (const chunk of chunks) {
+    const emb = await generateEmbeddingVector(chunk);
+    if (emb) results.push(emb);
+  }
+  return results;
 }
 
 export function chunkText(text: string, chunkSize = 1000, overlap = 200): string[] {
@@ -93,30 +73,21 @@ export async function generateChatResponse(
   context: string,
   history: { role: "user" | "assistant"; content: string }[]
 ): Promise<string> {
-  const client = getAIClient();
-  const model = process.env.AI_PROVIDER === "deepseek" ? "deepseek-chat" : "gpt-4o-mini";
   const systemPrompt = COMPLIANCE_SYSTEM_PROMPT.replace("{context}", context);
 
-  const response = await client.chat.completions.create({
-    model,
+  return chatWithFallback({
     messages: [
       { role: "system", content: systemPrompt },
-      ...history.slice(-10),
+      ...history.slice(-10).map((h) => ({ role: h.role as "user" | "assistant", content: h.content })),
       { role: "user", content: message },
     ],
     temperature: 0.3,
-    max_tokens: 1000,
+    maxTokens: 1000,
   });
-
-  return response.choices[0]?.message?.content ?? "I couldn't generate a response. Please try again.";
 }
 
 export async function summarizeDocument(text: string): Promise<string> {
-  const client = getAIClient();
-  const model = process.env.AI_PROVIDER === "deepseek" ? "deepseek-chat" : "gpt-4o-mini";
-
-  const response = await client.chat.completions.create({
-    model,
+  return chatWithFallback({
     messages: [
       {
         role: "system",
@@ -125,8 +96,6 @@ export async function summarizeDocument(text: string): Promise<string> {
       { role: "user", content: text.slice(0, 8000) },
     ],
     temperature: 0.2,
-    max_tokens: 300,
+    maxTokens: 300,
   });
-
-  return response.choices[0]?.message?.content ?? "";
 }

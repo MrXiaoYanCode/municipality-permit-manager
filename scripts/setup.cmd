@@ -29,6 +29,11 @@ if errorlevel 1 (
 echo [4/7] Ensuring .env.local exists...
 if not exist ".env.local" copy /Y ".env.example" ".env.local"
 
+echo [4b/7] AI provider setup reminder...
+echo   Gemini key:  https://aistudio.google.com/apikey  -^> GEMINI_API_KEY
+echo   OpenRouter:  https://openrouter.ai/keys          -^> OPENROUTER_API_KEY
+echo   OpenRouter tip: add $10 credits once to raise free limit 50 -^> 1000 req/day
+
 echo [5/7] Installing npm dependencies...
 call npm install
 if errorlevel 1 exit /b 1
@@ -40,11 +45,13 @@ if errorlevel 1 exit /b 1
 echo [7/7] Setup complete!
 echo.
 echo Next steps:
-echo   1. Edit .env.local with your Supabase, Stripe, and OpenAI keys
-echo   2. Run: "%GH%" auth login
-echo   3. Run: "%STRIPE%" login
-echo   4. Push repo: "%GH%" repo create municipality-permit-manager --private --source=. --remote=origin --push
-echo   5. Deploy: vercel --prod
-echo   6. Dev server: npm run dev
+echo   1. Edit .env.local with Supabase, Stripe, Gemini, and OpenRouter keys
+echo   2. Gemini:  https://aistudio.google.com/apikey  (free, no card)
+echo   3. OpenRouter: https://openrouter.ai/keys (optional fallback)
+echo   4. OpenRouter: add $10 credits before beta for 1000 free req/day
+echo   5. Run: "%GH%" auth login
+echo   6. Run: "%STRIPE%" login
+echo   7. Push repo and deploy: vercel --prod
+echo   8. Dev server: npm run dev
 echo.
 endlocal
