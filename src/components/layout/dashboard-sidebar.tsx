@@ -97,9 +97,16 @@ export function DashboardSidebar() {
       </aside>
 
       {mobileOpen && (
-        <aside className="fixed inset-y-0 left-0 z-40 flex w-64 flex-col glass-nav lg:hidden m-2 rounded-2xl">
-          <SidebarContent />
-        </aside>
+        <>
+          <div
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+            onClick={() => setMobileOpen(false)}
+            aria-hidden="true"
+          />
+          <aside className="fixed inset-y-0 left-0 z-50 m-2 flex w-[min(280px,calc(100vw-1rem))] flex-col rounded-2xl glass-nav lg:hidden">
+            <SidebarContent />
+          </aside>
+        </>
       )}
     </>
   );

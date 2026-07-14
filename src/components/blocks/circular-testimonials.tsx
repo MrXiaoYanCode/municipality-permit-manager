@@ -93,7 +93,7 @@ export function CircularTestimonials({
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.35 }}
           >
-            <p className="mb-4 text-sm leading-relaxed text-white/80 italic">
+            <p className="mb-4 text-sm leading-relaxed text-white/90 italic sm:text-base">
               &ldquo;{current.quote}&rdquo;
             </p>
             <p className="font-semibold text-white">{current.name}</p>

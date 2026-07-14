@@ -122,23 +122,26 @@ export function LandingContent() {
             AI-Powered Municipal Compliance
           </div>
 
-          <h1 className="mx-auto mb-6 max-w-4xl text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-            <span className="block sm:inline">Never Miss a</span>{" "}
-            <span className="mt-2 block bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent sm:mt-0 sm:inline">
+          <h1 className="mx-auto mb-6 max-w-4xl text-3xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            <span className="block">Never Miss a</span>
+            <span className="mt-1 block text-primary sm:mt-2">
               <Typewriter
                 words={["Permit Deadline", "Renewal Date", "Inspection", "Compliance Check"]}
+                className="w-full"
               />
             </span>
           </h1>
 
-          <p className="mx-auto mb-10 max-w-2xl text-lg text-muted-foreground">
+          <p className="mx-auto mb-10 max-w-2xl px-2 text-base text-muted-foreground sm:text-lg">
             Track municipal permits, renewal documents, inspection schedules, and compliance
             checklists — all in one beautiful dashboard.
           </p>
 
-          <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <Link href="/auth/signup">
-              <InteractiveHoverButton>Start Free — No Credit Card</InteractiveHoverButton>
+          <div className="flex w-full max-w-md flex-col items-stretch gap-4 px-2 sm:max-w-none sm:flex-row sm:items-center sm:justify-center">
+            <Link href="/auth/signup" className="w-full sm:w-auto">
+              <InteractiveHoverButton className="w-full px-6 py-3 text-sm sm:w-auto sm:px-8 sm:text-base">
+                Start Free — No Credit Card
+              </InteractiveHoverButton>
             </Link>
             <Link
               href="#features"

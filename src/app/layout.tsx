@@ -8,6 +8,12 @@ export const metadata: Metadata = {
     "Track permit deadlines, renewals, inspections, and compliance for restaurants, salons, cafes, events, and more.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>

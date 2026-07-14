@@ -51,10 +51,14 @@ export function Typewriter({
   }, [displayText, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pauseDuration]);
 
   return (
-    <span className={cn("relative inline-block text-left", className)}>
-      {/* Invisible sizer prevents layout shift */}
-      <span className="invisible" aria-hidden="true">{longestWord}|</span>
-      <span className="typewriter-cursor absolute left-0 top-0 whitespace-nowrap">
+    <span
+      className={cn(
+        "relative inline-flex min-h-[1.15em] items-center justify-center sm:justify-start",
+        className
+      )}
+      style={{ minWidth: `${longestWord.length}ch` }}
+    >
+      <span className="typewriter-cursor whitespace-nowrap text-primary">
         {displayText}
       </span>
     </span>
