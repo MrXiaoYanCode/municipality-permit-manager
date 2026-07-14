@@ -35,9 +35,11 @@ export async function POST(request: Request) {
       customer: customerId,
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
+      allow_promotion_codes: true,
       success_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?success=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/settings?canceled=true`,
       metadata: { user_id: user.id, tier },
+      subscription_data: { metadata: { user_id: user.id, tier } },
     });
 
     return NextResponse.json({ url: session.url });

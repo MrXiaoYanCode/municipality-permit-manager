@@ -30,3 +30,17 @@ export function getTierFromPriceId(priceId: string): SubscriptionTier {
 export function getQuotaForTier(tier: SubscriptionTier): number {
   return SUBSCRIPTION_TIERS[tier].quota;
 }
+
+/** Report usage to Stripe meter when user exceeds included document quota */
+export async function reportDocumentUsage(stripeCustomerId: string): Promise<void> {
+  if (!process.env.STRIPE_METER_ID) return;
+
+  const stripe = getStripe();
+  await stripe.billing.meterEvents.create({
+    event_name: "document_processed",
+    payload: {
+      stripe_customer_id: stripeCustomerId,
+      value: "1",
+    },
+  });
+}

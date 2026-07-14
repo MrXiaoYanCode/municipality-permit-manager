@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createServiceClient } from "@/lib/supabase/admin";
 import { extractPermitData, generateEmbeddings, chunkText, summarizeDocument } from "@/lib/ai/pipeline";
+import { reportDocumentUsage } from "@/lib/stripe";
 
 export async function POST(request: Request) {
   try {
@@ -15,7 +16,11 @@ export async function POST(request: Request) {
     if (!profile) return NextResponse.json({ error: "Profile not found" }, { status: 404 });
 
     if (profile.document_quota !== -1 && profile.documents_used >= profile.document_quota) {
-      return NextResponse.json({ error: "Document quota exceeded. Upgrade your plan." }, { status: 429 });
+      if (profile.stripe_customer_id && profile.subscription_tier !== "free") {
+        await reportDocumentUsage(profile.stripe_customer_id);
+      } else {
+        return NextResponse.json({ error: "Document quota exceeded. Upgrade your plan." }, { status: 429 });
+      }
     }
 
     const body = await request.json();
