@@ -122,12 +122,12 @@ export function LandingContent() {
             AI-Powered Municipal Compliance
           </div>
 
-          <h1 className="mx-auto mb-6 max-w-4xl text-3xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
-            <span className="block">Never Miss a</span>
-            <span className="mt-1 block text-primary sm:mt-2">
+          <h1 className="mx-auto mb-6 flex max-w-4xl flex-col items-center text-center text-3xl font-bold leading-tight tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+            <span className="block w-full">Never Miss a</span>
+            <span className="mt-1 flex w-full justify-center sm:mt-2">
               <Typewriter
                 words={["Permit Deadline", "Renewal Date", "Inspection", "Compliance Check"]}
-                className="w-full"
+                className="w-full max-w-[min(100%,22ch)] sm:max-w-[min(100%,28ch)]"
               />
             </span>
           </h1>

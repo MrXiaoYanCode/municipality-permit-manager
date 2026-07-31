@@ -11,6 +11,20 @@ interface TypewriterProps {
   pauseDuration?: number;
 }
 
+function useReducedMotion() {
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    setShouldReduceMotion(mediaQuery.matches);
+    const onChange = (e: MediaQueryListEvent) => setShouldReduceMotion(e.matches);
+    mediaQuery.addEventListener("change", onChange);
+    return () => mediaQuery.removeEventListener("change", onChange);
+  }, []);
+
+  return shouldReduceMotion;
+}
+
 export function Typewriter({
   words,
   className,
@@ -21,10 +35,16 @@ export function Typewriter({
   const [displayText, setDisplayText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const longestWord = words.reduce((a, b) => (a.length > b.length ? a : b), "");
 
   useEffect(() => {
+    if (shouldReduceMotion) {
+      setDisplayText(words[0] ?? "");
+      return;
+    }
+
     const currentWord = words[wordIndex % words.length];
 
     const timeout = setTimeout(
@@ -35,31 +55,43 @@ export function Typewriter({
           } else {
             setTimeout(() => setIsDeleting(true), pauseDuration);
           }
+        } else if (displayText.length > 0) {
+          setDisplayText(displayText.slice(0, -1));
         } else {
-          if (displayText.length > 0) {
-            setDisplayText(displayText.slice(0, -1));
-          } else {
-            setIsDeleting(false);
-            setWordIndex((prev) => (prev + 1) % words.length);
-          }
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
         }
       },
       isDeleting ? deletingSpeed : typingSpeed
     );
 
     return () => clearTimeout(timeout);
-  }, [displayText, isDeleting, wordIndex, words, typingSpeed, deletingSpeed, pauseDuration]);
+  }, [
+    displayText,
+    isDeleting,
+    wordIndex,
+    words,
+    typingSpeed,
+    deletingSpeed,
+    pauseDuration,
+    shouldReduceMotion,
+  ]);
 
   return (
     <span
       className={cn(
-        "relative inline-flex min-h-[1.15em] items-center justify-center sm:justify-start",
+        "relative mx-auto inline-flex max-w-full items-center justify-center text-center",
         className
       )}
-      style={{ minWidth: `${longestWord.length}ch` }}
+      aria-live="polite"
+      aria-atomic="true"
     >
-      <span className="typewriter-cursor whitespace-nowrap text-primary">
-        {displayText}
+      {/* Invisible spacer reserves longest-word width so layout does not jump */}
+      <span className="invisible block whitespace-nowrap px-1" aria-hidden="true">
+        {longestWord}
+      </span>
+      <span className="typewriter-cursor absolute inset-0 flex items-center justify-center whitespace-nowrap px-1 text-primary">
+        {displayText || "\u00A0"}
       </span>
     </span>
   );

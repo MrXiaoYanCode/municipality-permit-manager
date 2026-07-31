@@ -53,7 +53,8 @@ function buildProviders(): ProviderConfig[] {
         apiKey: geminiKey,
         baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
       }),
-      models: ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"],
+      // 2.5 Flash retires Oct 16, 2026 — use cost-effective 3.x replacements
+      models: ["gemini-3.1-flash-lite", "gemini-3.5-flash-lite", "gemini-3.6-flash"],
     });
   }
 

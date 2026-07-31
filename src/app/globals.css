@@ -108,5 +108,13 @@ html {
 .typewriter-cursor::after {
   content: "|";
   animation: typewriter-blink 1s step-end infinite;
-  margin-left: 2px;
+  margin-left: 0.08em;
+  font-weight: 400;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .typewriter-cursor::after {
+    animation: none;
+    opacity: 1;
+  }
 }

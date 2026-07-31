@@ -31,6 +31,7 @@ if not exist ".env.local" copy /Y ".env.example" ".env.local"
 
 echo [4b/7] AI provider setup reminder...
 echo   Gemini key:  https://aistudio.google.com/apikey  -^> GEMINI_API_KEY
+echo   Models: gemini-3.1-flash-lite, 3.5-flash-lite, 3.6-flash
 echo   OpenRouter:  https://openrouter.ai/keys          -^> OPENROUTER_API_KEY
 echo   OpenRouter tip: add $10 credits once to raise free limit 50 -^> 1000 req/day
 
