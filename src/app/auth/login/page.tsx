@@ -21,16 +21,26 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-    if (error) {
-      setError(error.message);
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      window.location.href = "/dashboard";
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Something went wrong";
+      setError(
+        message.includes("Failed to fetch")
+          ? "Cannot reach the auth service. Check that Supabase is configured and your connection is online."
+          : message
+      );
+    } finally {
       setLoading(false);
-      return;
     }
-
-    window.location.href = "/dashboard";
   };
 
   return (
