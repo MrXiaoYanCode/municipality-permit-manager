@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { getAuthErrorMessage } from "@/lib/auth-errors";
 import { AuthLayout } from "@/components/auth/auth-layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,7 +34,7 @@ export default function SignupPage() {
       });
 
       if (error) {
-        setError(error.message);
+        setError(getAuthErrorMessage(error));
         return;
       }
 
@@ -45,12 +46,7 @@ export default function SignupPage() {
 
       setSuccess(true);
     } catch (err) {
-      const message = err instanceof Error ? err.message : "Something went wrong";
-      setError(
-        message.includes("Failed to fetch")
-          ? "Cannot reach the auth service. Check that Supabase is configured and your connection is online."
-          : message
-      );
+      setError(getAuthErrorMessage(err));
     } finally {
       setLoading(false);
     }
