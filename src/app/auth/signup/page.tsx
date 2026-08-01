@@ -26,7 +26,7 @@ export default function SignupPage() {
 
     try {
       const supabase = createClient();
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: { data: { full_name: fullName } },
@@ -34,6 +34,12 @@ export default function SignupPage() {
 
       if (error) {
         setError(error.message);
+        return;
+      }
+
+      // Auto-confirm is enabled in DB — session is usually returned immediately
+      if (data.session) {
+        window.location.href = "/dashboard";
         return;
       }
 
